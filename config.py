@@ -6,10 +6,13 @@ import sys
 def init():
     global thermodeInfo, monitorInfo
     global thermode, monitor
+    global gender, program
     thermodeInfo = json_read(Path('CalibrationFiles'), 'thermodeinfo')
     monitorInfo = json_read(Path('CalibrationFiles'), 'monitorinfo')
     thermode = ''
     monitor = ''
+    gender = ''
+    program = ''
 
 
 def json_read(data_folder, fileName):

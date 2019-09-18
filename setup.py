@@ -20,6 +20,10 @@ def init():
         genderMenuDisplay.set(selected)
         config.gender = selected
 
+    def selectProgram(selected):
+        programMenuDisplay.set(selected)
+        config.program = selected
+
     def accept():
         config.participantID = e.get()
         question = 'Would you like to run the programme with these settings?'
@@ -30,7 +34,6 @@ def init():
     def displayResults():
         from results import ResultsShower
         ResultsShower()
-
 
     config.init()
     root = tk.Tk()
@@ -130,6 +133,40 @@ def init():
                       bd=4,
                       relief=tk.RAISED)
     genderMenu.pack(side=tk.RIGHT, expand=True)
+
+    # Which Program
+
+    programContainer = tk.Frame(root, bg=defaultBGColour)
+    programContainer.pack(side=tk.TOP, expand=True)
+
+    programLabel = tk.Label(programContainer,
+                           fg=textColor,
+                           justify=tk.RIGHT,
+                           text='Program:',
+                           bg=defaultBGColour,
+                           width=defaultWidth)
+    programLabel.pack(side=tk.LEFT)
+
+    programMenuDisplay = tk.StringVar()
+    programMenuDisplay.set('select')
+    programMenu = tk.Menubutton(programContainer,
+                               textvariable=programMenuDisplay,
+                               width=defaultWidth)
+
+    picks = tk.Menu(programMenu)
+    programMenu.config(menu=picks)
+
+    picks.add_command(
+        label='HPT only', command=lambda name='HPT only': selectProgram('HPT only'))
+    picks.add_command(
+        label='All', command=lambda name='All': selectProgram('All'))
+
+    programMenu.config(bg=strongButtonColour,
+                      fg='white',
+                      font='helvetica 12 bold',
+                      bd=4,
+                      relief=tk.RAISED)
+    programMenu.pack(side=tk.RIGHT, expand=True)
 
     # Bottom buttons
 
