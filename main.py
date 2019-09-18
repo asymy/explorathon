@@ -1,3 +1,6 @@
 from results import ResultsShower
+import setup
 
-ResultsShower()
+setup.init()
+
+# ResultsShower()
