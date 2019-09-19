@@ -19,7 +19,7 @@ def init():
     }
     monitorInfo = json_read(Path('CalibrationFiles'), 'monitorinfo')
     thermode = ''
-    monitor = ''
+    monitor = 'Lonovo'
     gender = ''
     program = ''
     selectedMonitor = ''
@@ -33,14 +33,43 @@ def init():
         'tolerance': 2
     }
 
-    global cancelProg
+    global cancelProg, startThreshold
     cancelProg = False
+    startThreshold = False
 
-    global currentTemp, targetTemp, changeProg, slope
+    global currentTemp, targetTemp, changeProg, slope, collectedTemp, temperatureCollected
     currentTemp = 0.0
     changeProg = True
     targetTemp = 32.0
     slope = 1
+    collectedTemp = 0
+    temperatureCollected = False
+
+    global buttonState
+    buttonState = {
+        'HPTRun': False,
+        'CDTRun': False,
+        'WDTRun': False,
+    }
+
+    global repititions
+    repititions = 3
+
+    global buttonColour, buttonArray
+    buttonColour = {
+        'preClick': ['mediumorchid', 'plum'],
+        'postClick': ['darkgray', 'darkgray'],
+        'postRun': ['thistle', 'thistle'],
+    }
+    buttonArray = {}
+
+    global progStatus
+    progStatus = {
+        'name': '',
+        'prevTemp': 0.0,
+        'nextTemp': 0.0,
+        'timeLeft': 0.0,
+    }
 
 
 def json_read(data_folder, fileName):

@@ -47,7 +47,7 @@ class MyDataFetcher(StoppableThread):
             gen.writeandcheck(self.ser, gain1)
             gen.writeandcheck(self.ser, gainC)
             self._dataClass = dataClass
-            self._period = 1
+            self._period = 1/10
             self._nextCall = time.time()
         else:
             print('Thermode Not Sending Data')
@@ -60,17 +60,27 @@ class MyDataFetcher(StoppableThread):
     def poll_temp(self):
         self.ser.write(str.encode('M000'))
         red = self.ser.read(4).decode("utf-8")
+        if red[0] == 'P':
+            config.collectedTemp = int(red[1:], 16)/10
+            config.temperatureCollected = True
         return int(red[1:], 16)/10
 
     def run(self):
         while not self.stopped():
             callTime = time.time()
             config.currentTemp = self.poll_temp()
-            print(config.currentTemp)
             # add data to data class
-            # if config.changeProg:
-            #     gen.set_temp(self.ser, config.targetTemp, config.slope)
-            #     config.changeProg = False
+            if config.changeProg:
+                gen.set_temp(self.ser, config.targetTemp, config.slope)
+                config.changeProg = False
+            if config.startThreshold:
+                gen.set_threshold(
+                    self.ser,
+                    config.defaultVals['startingTemp'],
+                    config.defaultVals['stopTemp'],
+                    config.defaultVals['slope'],
+                    config.defaultVals['returnSlope']
+                )
             self._dataClass.XData.append(time.time()-config.startTime)
             self._dataClass.YData.append(config.currentTemp)
             # sleep until next execution

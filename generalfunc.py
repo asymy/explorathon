@@ -69,3 +69,4 @@ class general(Thread):
         self.writeandcheck(ser, 'S' + slope)
         self.writeandcheck(ser, 'T' + stop)
         self.writeandcheck(ser, 'C003')
+        config.startThreshold = False
