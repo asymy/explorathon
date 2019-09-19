@@ -4,34 +4,43 @@ import sys
 
 
 def init():
-    global thermodeInfo, monitorInfo, selectedThermode, selectedMonitor
+    global thermodeInfo, monitorInfo, selectedMonitor
     global thermode, monitor
     global gender, program
     global participantID
-    thermodeInfo = json_read(Path('CalibrationFiles'), 'thermodeinfo')
+    thermodeInfo = {
+        "name": "thermode_v5",
+        "OffSetTemp_DA": 366,
+        "ScaleFactorTemp_DA": 45.8,
+        "OffSetSlope_DA": -48,
+        "ScaleFactorSlope_DA": 437,
+        "OffSetTemp_AD": 27,
+        "ScaleFactorTemp_AD": 69.1
+    }
     monitorInfo = json_read(Path('CalibrationFiles'), 'monitorinfo')
     thermode = ''
     monitor = ''
     gender = ''
     program = ''
     selectedMonitor = ''
-    selectedThermode = ''
     participantID = ''
 
     global defaultVals
     defaultVals = {
         'slope': 1,
         'returnSlope': 3,
-        'startingTemp': 32
+        'startingTemp': 32,
+        'tolerance': 2
     }
 
     global cancelProg
     cancelProg = False
 
-    global currentTemp, targetTemp, changeProg
+    global currentTemp, targetTemp, changeProg, slope
     currentTemp = 0.0
     changeProg = True
     targetTemp = 32.0
+    slope = 1
 
 
 def json_read(data_folder, fileName):

@@ -59,30 +59,13 @@ class general(Thread):
         self.writeandcheck(ser, 'R' + slope)
         self.writeandcheck(ser, 'C000')
 
-    def predict_val(self, x, y, next_x):
-        i = np.where(x == 0.0)
-        x = np.delete(x, i[0], 0)
-        y = np.delete(y, i[0], 0)
-        x = np.array(x).reshape(len(x), 1)
-        model = LinearRegression()
-        model.fit(x, y)
-        x_predict = np.array(next_x).reshape(1, -1)
-        y_predict = model.predict(x_predict)
-        return y_predict
-
-    def findmissingvals(self, painRatings):
-        for r in reversed(range(9)):
-            i = np.where((painRatings >= r-0.5) & (painRatings <= r+0.5))
-            a = list(i[0])
-            if not a:
-                print('\ttarget rating: ' + str(r))
-                return r
-        return 9
-
-    def make_model(self, x, y, x_predictors):
-        x = np.array(x).reshape(len(x), 1)
-        model = LinearRegression()
-        model.fit(x, y)
-        x_predict = np.array(x_predictors).reshape(len(x_predictors), 1)
-        y_predict = model.predict(x_predict)
-        return y_predict
+    def set_threshold(self, ser, floatstart, floatstop, floatslope, floatresetslope):
+        start = self.num2hex(int(floatstart*10))
+        stop = self.num2hex(int(floatstop*10))
+        slope = self.num2hex(int(floatslope*10))
+        resetslope = self.num2hex(int(floatresetslope*10))
+        self.writeandcheck(ser, 'B' + start)
+        self.writeandcheck(ser, 'R' + resetslope)
+        self.writeandcheck(ser, 'S' + slope)
+        self.writeandcheck(ser, 'T' + stop)
+        self.writeandcheck(ser, 'C003')

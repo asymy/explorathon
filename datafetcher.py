@@ -1,24 +1,27 @@
-import serial
+
+import numpy as np
 import time
+import serial
 import sys
 
+# Personal
+from generalfunc import general
+from stopThreadclass import StoppableThread
 from generalfunc import general
 import config
-from stopThreadclass import StoppableThread
 
 gen = general()
 
 
-
-
-class MyDataFetchClass(StoppableThread):
+class MyDataFetcher(StoppableThread):
 
     def __init__(self, dataClass):
 
         StoppableThread.__init__(self)
+
         self.ser = serial.Serial()
         self.ser.baudrate = 9600
-        self.ser.port = 'COM1'
+        self.ser.port = 'COM4'
         self.ser.parity = 'N'
         self.ser.bytesize = 8
         self.ser.stopbits = 1
@@ -26,7 +29,7 @@ class MyDataFetchClass(StoppableThread):
         self.ser.timeout = 5
         self.ser.open()
 
-        Thermode = config.thermodeInfo[config.selectedThermode]
+        Thermode = config.thermodeInfo
 
         offset0 = 'G' + gen.num2hex(float(Thermode['OffSetTemp_DA']))
         gain0 = 'H' + gen.num2hex(float(Thermode['ScaleFactorTemp_DA'])*10)
@@ -44,7 +47,7 @@ class MyDataFetchClass(StoppableThread):
             gen.writeandcheck(self.ser, gain1)
             gen.writeandcheck(self.ser, gainC)
             self._dataClass = dataClass
-            self._period = 1/30
+            self._period = 1
             self._nextCall = time.time()
         else:
             print('Thermode Not Sending Data')
@@ -63,11 +66,11 @@ class MyDataFetchClass(StoppableThread):
         while not self.stopped():
             callTime = time.time()
             config.currentTemp = self.poll_temp()
+            print(config.currentTemp)
             # add data to data class
-            if config.changeProg:
-                gen.set_temp(self.ser, config.targetTemp,
-                             config.defaultVals['Slope'])
-                config.changeProg = False
+            # if config.changeProg:
+            #     gen.set_temp(self.ser, config.targetTemp, config.slope)
+            #     config.changeProg = False
             self._dataClass.XData.append(time.time()-config.startTime)
             self._dataClass.YData.append(config.currentTemp)
             # sleep until next execution
