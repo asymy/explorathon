@@ -55,7 +55,8 @@ class MyDataFetcher(StoppableThread):
             sys.exit()
 
         config.startTime = time.time()
-        self._dataClass.YData[0] = self.poll_temp()
+        self.poll_temp()
+        self._dataClass.YData[0] = config.currentTemp
 
     def poll_temp(self):
         self.ser.write(str.encode('M000'))
@@ -63,12 +64,16 @@ class MyDataFetcher(StoppableThread):
         if red[0] == 'P':
             config.collectedTemp = int(red[1:], 16)/10
             config.temperatureCollected = True
-        return int(red[1:], 16)/10
+        elif red[0] == 'F':
+            config.collectedTemp = int(red[1:], 16)/10
+            config.temperatureCollected = True
+        else:
+            config.currentTemp = int(red[1:], 16)/10
 
     def run(self):
         while not self.stopped():
             callTime = time.time()
-            config.currentTemp = self.poll_temp()
+            self.poll_temp()
             # add data to data class
             if config.changeProg:
                 gen.set_temp(self.ser, config.targetTemp, config.slope)
@@ -81,6 +86,7 @@ class MyDataFetcher(StoppableThread):
                     config.defaultVals['slope'],
                     config.defaultVals['returnSlope']
                 )
+                config.startThreshold = False
             self._dataClass.XData.append(time.time()-config.startTime)
             self._dataClass.YData.append(config.currentTemp)
             # sleep until next execution

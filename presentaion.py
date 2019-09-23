@@ -51,7 +51,7 @@ class MyPresentation():
         self.hLine, = plt.plot(0, 0, 'g')
         self.hLine.set_color('b')
         self.ani = FuncAnimation(self.fig, self.run, interval=10, repeat=True)
-        self.ax.axes.set_ylim(19, 51)
+        self.ax.axes.set_ylim(14, 51)
         self.ax.axes.set_ylabel('Temperature (°C)', fontsize=16)
         self.ax.axes.set_xlabel('Time (s)', fontsize=16)
         self.ax.axes.grid()
@@ -231,6 +231,7 @@ class MyPresentation():
         config.cancelProg = True
 
     def MyQuit(self, event):
+        print('Quit Button Pressed')
         config.cancelProg = True
         # name = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         # fileName = (name + '_Participant' + config.participantID)
@@ -239,10 +240,10 @@ class MyPresentation():
         #     'temp': self._dataClass.YData
         # }
         # gen.json_write(config.folders['log'], data, fileName)
-        # for thread in threading.enumerate():
-        #     if thread.name is not 'MainThread':
-        #         print(thread.name)
-        #         thread.stop()
-        #         thread.join()
-        print('Quit Button Pressed')
-        core.quit()
+        for thread in threading.enumerate():
+            if thread.name is not 'MainThread':
+                thread.stop()
+                print(thread.name)
+        plt.close()
+        import main
+        main.run()

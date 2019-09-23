@@ -30,7 +30,7 @@ def init():
         'slope': 1,
         'returnSlope': 3,
         'startingTemp': 32,
-        'tolerance': 2
+        'tolerance': 1
     }
 
     global cancelProg, startThreshold

@@ -1,6 +1,10 @@
 from results import ResultsShower
 import setup
 
-setup.init()
 
-# ResultsShower()
+def run():
+    setup.init()
+
+
+if __name__ == "__main__":
+    run()

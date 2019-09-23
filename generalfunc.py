@@ -46,11 +46,14 @@ class general(Thread):
     def writeandcheck(self, ser, towrite):
         ser.write(str.encode(towrite))
         red = ser.read(4).decode("utf-8")
+        # print(towrite)
+        # print(red)
         if red == towrite:
             pass
         else:
-            exit('Error: Value to write = ' + str(towrite) +
-                 ', Value read = ' + str(red))
+            self.writeandcheck(ser, towrite)
+            # exit('Error: Value to write = ' + str(towrite) +
+            #      ', Value read = ' + str(red))
 
     def set_temp(self, ser, floattemp, floatslope):
         st = self.num2hex(int(floattemp*10))
