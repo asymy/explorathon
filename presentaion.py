@@ -182,21 +182,16 @@ class MyPresentation():
                 changeDisp = True
         if changeDisp:
             self.infoCurrentProgramme.set_text(config.progStatus['name'])
-            self.infoCDT.set_text(
-                (str(config.progStatus['prevTemp']) + '°C'))
-            # self.infoCPT.set_text(
-            #     (str(config.currentRating) + ' /10'))
-            self.infoWDT.set_text(
-                (str(config.progStatus['nextTemp']) + '°C'))
-            self.infoHPT.set_text(
-                (str(config.progStatus['timeLeft']) + 's'))
-
         else:
             self.infoCurrentProgramme.set_text('None')
-            self.infoCDT.set_text('')
-            self.infoCPT.set_text('')
-            self.infoWDT.set_text((''))
-            self.infoHPT.set_text((''))
+        self.infoCDT.set_text(
+            (str(config.results['CDT']) + '°C'))
+        self.infoWDT.set_text(
+            (str(config.results['WDT']) + '°C'))
+        self.infoHPT.set_text(
+            (str(config.results['HPT']) + '°C'))
+        self.infoCPT.set_text(
+            (str(config.results['CPT']) + '°C'))
 
         # PSYCHOPY
         # if config.text == '+':
@@ -233,13 +228,6 @@ class MyPresentation():
     def MyQuit(self, event):
         print('Quit Button Pressed')
         config.cancelProg = True
-        # name = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        # fileName = (name + '_Participant' + config.participantID)
-        # data = {
-        #     'time': self._dataClass.XData,
-        #     'temp': self._dataClass.YData
-        # }
-        # gen.json_write(config.folders['log'], data, fileName)
         for thread in threading.enumerate():
             if thread.name is not 'MainThread':
                 thread.stop()

@@ -71,6 +71,14 @@ def init():
         'timeLeft': 0.0,
     }
 
+    global results
+    results = {
+        'HPT': 0.0,
+        'CDT': 0.0,
+        'CPT': 0.0,
+        'WDT': 0.0
+    }
+
 
 def json_read(data_folder, fileName):
     DataFile = Path(data_folder / (fileName + '.json'))
