@@ -96,7 +96,7 @@ class MyPresentation():
         tax.get_xaxis().set_visible(False)
         tax.get_yaxis().set_visible(False)
 
-        x1, x2, x3 = 0.02, 0.43, 0.75
+        x1, x2, x3 = 0.02, 0.43, 0.73
         y1, y2 = 0.73, 0.35
         txt = 'Programme Running:'
         write_to_axes(tax, txt, [x1, y1])
@@ -104,16 +104,16 @@ class MyPresentation():
         txt = 'Current Temperature:'
         write_to_axes(tax, txt, [x1, y2])
 
-        txt = 'Previous Temp:'
+        txt = 'Cold Detection:'
         write_to_axes(tax, txt, [x2, y1])
 
-        txt = 'Pain Rating:'
+        txt = 'Cold Pain:'
         write_to_axes(tax, txt, [x2, y2])
 
-        txt = 'Next Temp:'
+        txt = 'Warm Detection:'
         write_to_axes(tax, txt, [x3, y1])
 
-        txt = 'Time to Next:'
+        txt = 'Heat Pain:'
         write_to_axes(tax, txt, [x3, y2])
 
         x1, x2, x3 = 0.31, 0.63, 0.93
@@ -121,10 +121,10 @@ class MyPresentation():
         self.infoCurrentProgramme = create_info_box(tax, [x1, y1])
         self.infoCurrentProgramme.set_text('None')
         self.infoCurrentTemp = create_info_box(tax, [x1, y2])
-        self.infoPreviousTemp = create_info_box(tax, [x2, y1])
-        self.infoPainRating = create_info_box(tax, [x2, y2])
-        self.infoNextTemp = create_info_box(tax, [x3, y1])
-        self.infoTimeToNext = create_info_box(tax, [x3, y2])
+        self.infoCDT = create_info_box(tax, [x2, y1])
+        self.infoCPT = create_info_box(tax, [x2, y2])
+        self.infoWDT = create_info_box(tax, [x3, y1])
+        self.infoHPT = create_info_box(tax, [x3, y2])
 
         # PSYCHOPY
         # self.mon = monitors.Monitor(name=config.monitor)
@@ -182,21 +182,21 @@ class MyPresentation():
                 changeDisp = True
         if changeDisp:
             self.infoCurrentProgramme.set_text(config.progStatus['name'])
-            self.infoPreviousTemp.set_text(
+            self.infoCDT.set_text(
                 (str(config.progStatus['prevTemp']) + '°C'))
-            # self.infoPainRating.set_text(
+            # self.infoCPT.set_text(
             #     (str(config.currentRating) + ' /10'))
-            self.infoNextTemp.set_text(
+            self.infoWDT.set_text(
                 (str(config.progStatus['nextTemp']) + '°C'))
-            self.infoTimeToNext.set_text(
+            self.infoHPT.set_text(
                 (str(config.progStatus['timeLeft']) + 's'))
 
         else:
             self.infoCurrentProgramme.set_text('None')
-            self.infoPreviousTemp.set_text('')
-            self.infoPainRating.set_text('')
-            self.infoNextTemp.set_text((''))
-            self.infoTimeToNext.set_text((''))
+            self.infoCDT.set_text('')
+            self.infoCPT.set_text('')
+            self.infoWDT.set_text((''))
+            self.infoHPT.set_text((''))
 
         # PSYCHOPY
         # if config.text == '+':

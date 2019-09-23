@@ -79,6 +79,7 @@ class MyDataFetcher(StoppableThread):
                 gen.set_temp(self.ser, config.targetTemp, config.slope)
                 config.changeProg = False
             if config.startThreshold:
+                config.startThreshold = False
                 gen.set_threshold(
                     self.ser,
                     config.defaultVals['startingTemp'],
@@ -86,7 +87,6 @@ class MyDataFetcher(StoppableThread):
                     config.defaultVals['slope'],
                     config.defaultVals['returnSlope']
                 )
-                config.startThreshold = False
             self._dataClass.XData.append(time.time()-config.startTime)
             self._dataClass.YData.append(config.currentTemp)
             # sleep until next execution

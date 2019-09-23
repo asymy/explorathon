@@ -37,55 +37,47 @@ class MyHeatPainProgramme(StoppableThread):
         print('HPT')
         config.progStatus['name'] = 'HPT'
         config.defaultVals['stopTemp'] = 50.0
-        gen.wait(random.randint(1, 2))
-        for n in range(config.repititions):
-            self.setandcheck(config.defaultVals['startingTemp'])
-            gen.wait(random.randint(9, 12))
-            config.temperatureCollected = False
-            config.startThreshold = True
-            while (config.cancelProg is False and config.temperatureCollected is False):
-                gen.wait(1)
-            print(n + config.collectedTemp)
-            config.targetTemp = config.defaultVals['startingTemp']
-            self.andcheck()
+        result = self.commonThreshold()
+        print(result)
         config.buttonState['HPTRun'] = False
         config.progStatus['name'] = ''
+        config.cancelProg = False
 
     def CDT(self):
         print('CDT')
         config.progStatus['name'] = 'CDT'
         config.defaultVals['stopTemp'] = 15.0
-        gen.wait(random.randint(1, 2))
-        for n in range(config.repititions):
-            self.setandcheck(config.defaultVals['startingTemp'])
-            gen.wait(random.randint(5, 7))
-            config.temperatureCollected = False
-            config.startThreshold = True
-            while (config.cancelProg is False and config.temperatureCollected is False):
-                gen.wait(1)
-            print(n + config.collectedTemp)
-            config.targetTemp = config.defaultVals['startingTemp']
-            self.andcheck()
+        result = self.commonThreshold()
+        print(result)
         config.progStatus['name'] = ''
         config.buttonState['CDTRun'] = False
+        config.cancelProg = False
 
     def WDT(self):
         print('WDT')
         config.progStatus['name'] = 'WDT'
         config.defaultVals['stopTemp'] = 40.0
+        result = self.commonThreshold()
+        print(result)
+        config.buttonState['WDTRun'] = False
+        config.progStatus['name'] = ''
+        config.cancelProg = False
+
+    def commonThreshold(self):
         gen.wait(random.randint(1, 2))
+        result = [0, 0, 0]
         for n in range(config.repititions):
             self.setandcheck(config.defaultVals['startingTemp'])
             gen.wait(random.randint(5, 7))
-            config.temperatureCollected = False
-            config.startThreshold = True
-            while (config.cancelProg is False and config.temperatureCollected is False):
-                gen.wait(1)
-            print(n + config.collectedTemp)
-            config.targetTemp = config.defaultVals['startingTemp']
-            self.andcheck()
-        config.buttonState['WDTRun'] = False
-        config.progStatus['name'] = ''
+            if config.cancelProg is False:
+                config.temperatureCollected = False
+                config.startThreshold = True
+                while (config.cancelProg is False and config.temperatureCollected is False):
+                    gen.wait(1)
+                result[n] = config.collectedTemp
+                config.targetTemp = config.defaultVals['startingTemp']
+                self.andcheck()
+        return result
 
     def inital(self):
         print('setting temp')
