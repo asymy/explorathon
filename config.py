@@ -7,7 +7,7 @@ def init():
     global thermodeInfo, monitorInfo, selectedMonitor
     global thermode, monitor
     global gender, program
-    global participantID, participantAge
+    global participantID, participantAge, participantGender
     thermodeInfo = {
         "name": "thermode_v5",
         "OffSetTemp_DA": 366,
@@ -25,6 +25,7 @@ def init():
     selectedMonitor = ''
     participantID = ''
     participantAge = 0
+    participantGender = ''
 
     global defaultVals
     defaultVals = {

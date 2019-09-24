@@ -235,6 +235,7 @@ class MyPresentation():
         plt.close()
         tempdic = config.results
         tempdic['age'] = config.participantAge
+        tempdic['gender'] = config.participantGender
         newdata = {
             config.participantID: config.results
         }
@@ -246,6 +247,10 @@ class MyPresentation():
         import json
         with open('data.json') as f:
             data = json.load(f)
-        data.update(newdata)
+        data['age'].append(newdata['age'])
+        data['gender'].append(newdata['gender'])
+        data['HPT'].append(newdata['HPT'])
+        data['CDT'].append(newdata['CDT'])
+        data['WDT'].append(newdata['WDT'])
         with open('data.json', 'w') as f:
             json.dump(data, f)
