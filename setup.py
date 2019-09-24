@@ -20,16 +20,15 @@ def init():
         genderMenuDisplay.set(selected)
         config.gender = selected
 
-    def selectProgram(selected):
-        programMenuDisplay.set(selected)
-        config.program = selected
-
     def accept():
         config.participantID = e.get()
+        config.participantAge = int(a.get())
         question = 'Would you like to run the programme with these settings?'
         ok = tk.messagebox.askokcancel('Confirm Set Up', question)
         if ok:
             root.destroy()
+            import startcollection
+            startcollection.run()
 
     def displayResults():
         from results import ResultsShower
@@ -96,9 +95,8 @@ def init():
                         bg=defaultBGColour,
                         width=defaultWidth)
     labelAge.pack(side=tk.LEFT)
-    e = tk.Entry(ageContainer, width=defaultWidth)
-    e.pack(side=tk.RIGHT)
-    e.focus_set()
+    a = tk.Entry(ageContainer, width=defaultWidth)
+    a.pack(side=tk.RIGHT)
 
     # Participant Gender
 
@@ -134,40 +132,6 @@ def init():
                       relief=tk.RAISED)
     genderMenu.pack(side=tk.RIGHT, expand=True)
 
-    # Which Program
-
-    programContainer = tk.Frame(root, bg=defaultBGColour)
-    programContainer.pack(side=tk.TOP, expand=True)
-
-    programLabel = tk.Label(programContainer,
-                           fg=textColor,
-                           justify=tk.RIGHT,
-                           text='Program:',
-                           bg=defaultBGColour,
-                           width=defaultWidth)
-    programLabel.pack(side=tk.LEFT)
-
-    programMenuDisplay = tk.StringVar()
-    programMenuDisplay.set('select')
-    programMenu = tk.Menubutton(programContainer,
-                               textvariable=programMenuDisplay,
-                               width=defaultWidth)
-
-    picks = tk.Menu(programMenu)
-    programMenu.config(menu=picks)
-
-    picks.add_command(
-        label='HPT only', command=lambda name='HPT only': selectProgram('HPT only'))
-    picks.add_command(
-        label='All', command=lambda name='All': selectProgram('All'))
-
-    programMenu.config(bg=strongButtonColour,
-                      fg='white',
-                      font='helvetica 12 bold',
-                      bd=4,
-                      relief=tk.RAISED)
-    programMenu.pack(side=tk.RIGHT, expand=True)
-
     # Bottom buttons
 
     bottomContainer = tk.Frame(root, bg=defaultBGColour)
@@ -194,6 +158,5 @@ def init():
                              width=defaultWidth,
                              command=displayResults)
     acceptButton.pack(side=tk.LEFT, padx=20, pady=5)
-
 
     tk.mainloop()

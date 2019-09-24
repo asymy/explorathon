@@ -233,5 +233,19 @@ class MyPresentation():
                 thread.stop()
                 print(thread.name)
         plt.close()
+        tempdic = config.results
+        tempdic['age'] = config.participantAge
+        newdata = {
+            config.participantID: config.results
+        }
+        self.savedata(newdata)
         import main
         main.run()
+
+    def savedata(self, newdata):
+        import json
+        with open('data.json') as f:
+            data = json.load(f)
+        data.update(newdata)
+        with open('data.json', 'w') as f:
+            json.dump(data, f)
