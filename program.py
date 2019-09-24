@@ -48,7 +48,8 @@ class MyHeatPainProgramme(StoppableThread):
         config.progStatus['name'] = 'CDT'
         config.defaultVals['stopTemp'] = 15.0
         result = self.commonThreshold()
-        config.results['CDT'] = result
+        config.results['CDT'] = round(
+            (result - config.defaultVals['startingTemp'])*10)/10
         config.progStatus['name'] = ''
         config.buttonState['CDTRun'] = False
         config.cancelProg = False
@@ -58,7 +59,8 @@ class MyHeatPainProgramme(StoppableThread):
         config.progStatus['name'] = 'WDT'
         config.defaultVals['stopTemp'] = 40.0
         result = self.commonThreshold()
-        config.results['WDT'] = result
+        config.results['WDT'] = round(
+            (result - config.defaultVals['startingTemp'])*10)/10
         config.buttonState['WDTRun'] = False
         config.progStatus['name'] = ''
         config.cancelProg = False

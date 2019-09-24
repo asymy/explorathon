@@ -236,9 +236,8 @@ class MyPresentation():
         tempdic = config.results
         tempdic['age'] = config.participantAge
         tempdic['gender'] = config.participantGender
-        newdata = {
-            config.participantID: config.results
-        }
+        tempdic['ID'] = config.participantID
+        newdata = tempdic
         self.savedata(newdata)
         import main
         main.run()

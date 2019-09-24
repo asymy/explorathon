@@ -18,7 +18,7 @@ def init():
 
     def selectGender(selected):
         genderMenuDisplay.set(selected)
-        config.gender = selected
+        config.participantGender = selected
 
     def accept():
         config.participantID = e.get()

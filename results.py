@@ -29,8 +29,12 @@ class ResultsShower():
 
         self.fig, (self.ax1, self.ax2) = plt.subplots(nrows=1, ncols=2)
         plt.subplots_adjust(right=0.85)
-        plt.xticks(fontsize=14)
-        plt.yticks(fontsize=14)
+        # plt.xticks(fontsize=14)
+        # plt.yticks(fontsize=14)
+        plt.setp(self.ax1.get_xticklabels(), fontsize=14)
+        plt.setp(self.ax1.get_yticklabels(), fontsize=14)
+        plt.setp(self.ax2.get_xticklabels(), fontsize=14)
+        plt.setp(self.ax2.get_yticklabels(), fontsize=14)
 
         self.fig.patch.set_facecolor('snow')
         self.fig.set_size_inches(20, 10)
@@ -38,15 +42,17 @@ class ResultsShower():
         self.ani = FuncAnimation(self.fig, self.run, interval=10, repeat=True)
         self.ax1.axes.set_ylim(19, 51)
         self.ax2.axes.set_ylim(19, 51)
-        self.ax1.set_title('Age Differences')
-        self.ax1.set_title('Gender Differences')
+        self.ax1.set_title('Age Differences', fontsize=18)
+        self.ax2.set_title('Gender Differences', fontsize=18)
         self.ax1.axes.set_ylabel('Temperature (°C)', fontsize=16)
         self.ax2.axes.set_ylabel('Temperature (°C)', fontsize=16)
         self.ax1.axes.set_xlabel('Age', fontsize=16)
         self.ax2.axes.set_xlabel('Gender', fontsize=16)
         self.ax1.axes.grid()
         self.ax2.axes.grid(axis='y')
-        self.ax1.axes.set_xlim(0, 50)
+        xmin = np.min(self.data['age'])-3
+        xmax = np.max(self.data['age'])+3
+        self.ax1.axes.set_xlim(xmin, xmax)
 
         self.aLine, = self.ax1.plot(0, 0, 'go')
 
@@ -55,11 +61,11 @@ class ResultsShower():
         femaleHPT, femaleCDT, femaleWDT = [], [], []
         maleHPT, maleCDT, maleWDT = [], [], []
         for n in range(len(self.data['gender'])):
-            if self.data['gender'][n] == 'female':
+            if self.data['gender'][n] == 'Female':
                 femaleHPT.append(self.data['HPT'][n])
                 femaleCDT.append(self.data['CDT'][n])
                 femaleWDT.append(self.data['WDT'][n])
-            else:
+            elif self.data['gender'][n] == 'Male':
                 maleHPT.append(self.data['HPT'][n])
                 maleCDT.append(self.data['CDT'][n])
                 maleWDT.append(self.data['WDT'][n])
@@ -67,10 +73,15 @@ class ResultsShower():
             femaleWDT), np.mean(maleWDT), np.mean(femaleCDT), np.mean(maleCDT)]
         error = [np.std(femaleHPT), np.std(maleHPT), np.std(
             femaleWDT), np.std(maleWDT), np.std(femaleCDT), np.std(maleCDT)]
-        plt.bar(y_pos, x_data, yerr=error,
-                align='center', alpha=0.5,  ecolor='black', capsize=10)
+        barlist = plt.bar(y_pos, x_data, yerr=error,
+                          align='center',  ecolor='black', capsize=10)
         plt.xticks(y_pos, objects)
-        self.ax2.set_xlim(-0.5, 1.5)
+        barlist[0].set_color('mediumpurple')
+        barlist[1].set_color('mediumturquoise')
+        barlist[2].set_color('mediumpurple')
+        barlist[3].set_color('mediumturquoise')
+        barlist[4].set_color('mediumpurple')
+        barlist[5].set_color('mediumturquoise')
 
         self.graphupdate()
 
@@ -89,23 +100,33 @@ class ResultsShower():
         self.titleupdate()
         if self.graphconfig['threshold'] == 'HPT':
             self.aLine.set_data(self.data['age'], self.data['HPT'])
-            self.ax1.axes.set_ylim(30, 51)
-            self.ax2.axes.set_ylim(30, 51)
+            xmax = round(np.max(self.data['HPT']))+2
+            self.ax1.axes.set_ylim(32, xmax)
+            self.ax2.axes.set_ylim(32, xmax)
             self.ax2.set_xlim(-0.5, 1.5)
+            self.aLine.set_color('darkred')
         elif self.graphconfig['threshold'] == 'WDT':
             self.aLine.set_data(self.data['age'], self.data['WDT'])
-            self.ax1.axes.set_ylim(30, 40)
-            self.ax2.axes.set_ylim(30, 40)
+            xmax = round(np.max(self.data['WDT']))+2
+            self.ax1.axes.set_ylim(0, xmax)
+            self.ax2.axes.set_ylim(0, xmax)
             self.ax2.set_xlim(1.5, 3.5)
+            self.aLine.set_color('crimson')
         elif self.graphconfig['threshold'] == 'CDT':
             self.aLine.set_data(self.data['age'], self.data['CDT'])
-            self.ax1.axes.set_ylim(20, 34)
-            self.ax2.axes.set_ylim(20, 34)
+            xmin = round(np.max(self.data['CDT']))-2
+            self.ax1.axes.set_ylim(xmin, 0)
+            self.ax2.axes.set_ylim(xmin, 0)
             self.ax2.set_xlim(3.5, 5.5)
+            self.aLine.set_color('navy')
 
     def titleupdate(self):
-        titlestr = self.graphconfig['threshold']
-        self.fig.suptitle(titlestr, fontsize=20)
+        if self.graphconfig['threshold'] == 'HPT':
+            self.fig.suptitle('Heat Pain', fontsize=20)
+        elif self.graphconfig['threshold'] == 'WDT':
+            self.fig.suptitle('Warm Detection', fontsize=20)
+        elif self.graphconfig['threshold'] == 'CDT':
+            self.fig.suptitle('Cold Detection', fontsize=20)
 
     def MyCloseResults(self, event):
         plt.close()
