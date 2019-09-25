@@ -52,6 +52,7 @@ def init():
         'HPTRun': False,
         'CDTRun': False,
         'WDTRun': False,
+        'testRun': False
     }
 
     global repititions

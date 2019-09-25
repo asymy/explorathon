@@ -81,6 +81,9 @@ class MyPresentation():
         b = b+delta
         config.buttonArray['CDT'] = createButton(
             [a, b, c, d], 'CDT', self.MyCDT)
+        b = b+delta
+        config.buttonArray['test'] = createButton(
+            [a, b, c, d], 'test', self.MyTest)
         a, b, c = 0.93, 0.91, 0.05
         config.buttonArray['Quit'] = createButton(
             [a, b, c, d], 'Quit', self.MyQuit)
@@ -218,6 +221,13 @@ class MyPresentation():
         config.buttonArray['CDT'].hovercolor = (
             config.buttonColour['postClick'][1])
         config.buttonState['CDTRun'] = True
+
+    def MyTest(self, event):
+        config.buttonArray['test'].color = (
+            config.buttonColour['postClick'][0])
+        config.buttonArray['test'].hovercolor = (
+            config.buttonColour['postClick'][1])
+        config.buttonState['testRun'] = True
 
     def AboutMe(self, event):
         webbrowser.open("aboutme.txt")

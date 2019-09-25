@@ -15,7 +15,8 @@ class MyHeatPainProgramme(StoppableThread):
             'HPTRun': False,
             'CDTRun': False,
             'WDTRun': False,
-            'initial': True
+            'initial': True,
+            'testRun': False
         }
         StoppableThread.__init__(self)
 
@@ -27,6 +28,8 @@ class MyHeatPainProgramme(StoppableThread):
                 self.WDT()
             elif config.buttonState['CDTRun']:
                 self.CDT()
+            elif config.buttonState['testRun']:
+                self.test()
             elif config.buttonState['initial']:
                 print('initialising')
                 self.inital()
@@ -65,6 +68,22 @@ class MyHeatPainProgramme(StoppableThread):
         config.progStatus['name'] = ''
         config.cancelProg = False
 
+    def test(self):
+        print('test')
+        config.progStatus['name'] = 'test'
+        saved = config.repititions
+        config.repititions = 1
+        config.defaultVals['stopTemp'] = 15.0
+        self.commonThreshold()
+        config.defaultVals['stopTemp'] = 40.0
+        self.commonThreshold()
+        config.defaultVals['stopTemp'] = 50.0
+        self.commonThreshold()
+        config.buttonState['testRun'] = False
+        config.progStatus['name'] = ''
+        config.cancelProg = False
+        config.repititions = saved
+
     def commonThreshold(self):
         gen.wait(random.randint(1, 2))
         results = [0, 0, 0]
@@ -83,7 +102,6 @@ class MyHeatPainProgramme(StoppableThread):
         return result
 
     def inital(self):
-        print('setting temp')
         self.setandcheck(32.0)
         print('tempset')
         config.buttonState['initial'] = False
