@@ -55,6 +55,7 @@ class ResultsShower():
         self.ax1.axes.set_xlim(xmin, xmax)
 
         self.aLine, = self.ax1.plot(0, 0, 'go')
+        self.bLine, = self.ax1.plot(0, 0, 'b*', markersize=22)
 
         objects = ('Female', 'Male', 'Female', 'Male', 'Female', 'Male')
         y_pos = (0, 1, 2, 3, 4, 5)
@@ -114,6 +115,8 @@ class ResultsShower():
             xmin = 32
             self.ax2.set_xlim(-0.5, 1.5)
             self.aLine.set_color('darkred')
+            self.bLine.set_color('magenta')
+
         elif self.graphconfig['threshold'] == 'WDT':
             for n in range(len(self.data['WDT'])):
                 if self.data['WDT'][n]:
@@ -123,6 +126,8 @@ class ResultsShower():
             xmin = 0
             self.ax2.set_xlim(1.5, 3.5)
             self.aLine.set_color('crimson')
+            self.bLine.set_color('magenta')
+
         elif self.graphconfig['threshold'] == 'CDT':
             for n in range(len(self.data['CDT'])):
                 if self.data['HPT'][n]:
@@ -132,8 +137,10 @@ class ResultsShower():
             xmin = round(np.min(xdata))-2
             self.ax2.set_xlim(3.5, 5.5)
             self.aLine.set_color('navy')
+            self.bLine.set_color('magenta')
 
         self.aLine.set_data(ydata, xdata)
+        self.bLine.set_data(ydata[-1], xdata[-1])
         self.ax1.axes.set_ylim(xmin, xmax)
         self.ax2.axes.set_ylim(xmin, xmax)
 
