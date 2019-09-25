@@ -62,17 +62,23 @@ class ResultsShower():
         maleHPT, maleCDT, maleWDT = [], [], []
         for n in range(len(self.data['gender'])):
             if self.data['gender'][n] == 'Female':
-                femaleHPT.append(self.data['HPT'][n])
-                femaleCDT.append(self.data['CDT'][n])
-                femaleWDT.append(self.data['WDT'][n])
+                if self.data['HPT'][n]:
+                    femaleHPT.append(self.data['HPT'][n])
+                if self.data['CDT'][n]:
+                    femaleCDT.append(self.data['CDT'][n])
+                if self.data['WDT'][n]:
+                    femaleWDT.append(self.data['WDT'][n])
             elif self.data['gender'][n] == 'Male':
-                maleHPT.append(self.data['HPT'][n])
-                maleCDT.append(self.data['CDT'][n])
-                maleWDT.append(self.data['WDT'][n])
-        x_data = [np.mean(femaleHPT), np.mean(maleHPT), np.mean(
-            femaleWDT), np.mean(maleWDT), np.mean(femaleCDT), np.mean(maleCDT)]
-        error = [np.std(femaleHPT), np.std(maleHPT), np.std(
-            femaleWDT), np.std(maleWDT), np.std(femaleCDT), np.std(maleCDT)]
+                if self.data['HPT'][n]:
+                    maleHPT.append(self.data['HPT'][n])
+                if self.data['CDT'][n]:
+                    maleCDT.append(self.data['CDT'][n])
+                if self.data['WDT'][n]:
+                    maleWDT.append(self.data['WDT'][n])
+        x_data = [np.nanmean(femaleHPT), np.nanmean(maleHPT), np.nanmean(
+            femaleWDT), np.nanmean(maleWDT), np.nanmean(femaleCDT), np.nanmean(maleCDT)]
+        error = [np.nanstd(femaleHPT), np.nanstd(maleHPT), np.nanstd(
+            femaleWDT), np.nanstd(maleWDT), np.nanstd(femaleCDT), np.nanstd(maleCDT)]
         barlist = plt.bar(y_pos, x_data, yerr=error,
                           align='center',  ecolor='black', capsize=10)
         plt.xticks(y_pos, objects)
@@ -98,27 +104,38 @@ class ResultsShower():
 
     def graphupdate(self):
         self.titleupdate()
+        xdata, ydata = [], []
         if self.graphconfig['threshold'] == 'HPT':
-            self.aLine.set_data(self.data['age'], self.data['HPT'])
-            xmax = round(np.max(self.data['HPT']))+2
-            self.ax1.axes.set_ylim(32, xmax)
-            self.ax2.axes.set_ylim(32, xmax)
+            for n in range(len(self.data['HPT'])):
+                if self.data['HPT'][n]:
+                    xdata.append(self.data['HPT'][n])
+                    ydata.append(self.data['age'][n])
+            xmax = round(np.max(xdata))+2
+            xmin = 32
             self.ax2.set_xlim(-0.5, 1.5)
             self.aLine.set_color('darkred')
         elif self.graphconfig['threshold'] == 'WDT':
-            self.aLine.set_data(self.data['age'], self.data['WDT'])
-            xmax = round(np.max(self.data['WDT']))+2
-            self.ax1.axes.set_ylim(0, xmax)
-            self.ax2.axes.set_ylim(0, xmax)
+            for n in range(len(self.data['WDT'])):
+                if self.data['WDT'][n]:
+                    xdata.append(self.data['WDT'][n])
+                    ydata.append(self.data['age'][n])
+            xmax = round(np.max(xdata))+2
+            xmin = 0
             self.ax2.set_xlim(1.5, 3.5)
             self.aLine.set_color('crimson')
         elif self.graphconfig['threshold'] == 'CDT':
-            self.aLine.set_data(self.data['age'], self.data['CDT'])
-            xmin = round(np.max(self.data['CDT']))-2
-            self.ax1.axes.set_ylim(xmin, 0)
-            self.ax2.axes.set_ylim(xmin, 0)
+            for n in range(len(self.data['CDT'])):
+                if self.data['HPT'][n]:
+                    xdata.append(self.data['CDT'][n])
+                    ydata.append(self.data['age'][n])
+            xmax = 0
+            xmin = round(np.min(xdata))-2
             self.ax2.set_xlim(3.5, 5.5)
             self.aLine.set_color('navy')
+
+        self.aLine.set_data(ydata, xdata)
+        self.ax1.axes.set_ylim(xmin, xmax)
+        self.ax2.axes.set_ylim(xmin, xmax)
 
     def titleupdate(self):
         if self.graphconfig['threshold'] == 'HPT':

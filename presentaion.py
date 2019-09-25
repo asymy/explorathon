@@ -251,5 +251,6 @@ class MyPresentation():
         data['HPT'].append(newdata['HPT'])
         data['CDT'].append(newdata['CDT'])
         data['WDT'].append(newdata['WDT'])
+        data['ID'].append(newdata['ID'])
         with open('data.json', 'w') as f:
             json.dump(data, f)
